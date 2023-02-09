@@ -2,6 +2,7 @@
 #include <graphics.h>
 #include <conio.h>
 
+//predefined variables.
 static int radius = 5;
 static int startx = 20;
 static int starty = 20;
@@ -47,7 +48,7 @@ void maze(){
 	rectangle(startx - 10, starty - 10, endx + 10, endy + 10); // encloses a square of dimension 400 x 400
 
 	//making maze path
-	setcolor(LIGHTGRAY); // code : 7
+	setcolor(LIGHTGRAY); // color code : 7
 	moveto(startx, starty);
 
 	for(i = 0; i < count+1 ; i ++){
@@ -64,55 +65,59 @@ int check(int x, int y){
 }
 
 void draw_maze(){
-	char key;
-	int n, u, loop = 1;
-	int x, y, i;
+	char key; // to store user key input.
+	int n; // making an nxn maze
+	int loop = 1;
+	int x, y;
 
 	cleardevice();
 	delay(10);
+
+	//Asking the user to select the appropriate maze size.
 	printf("\nMaze Size: <1> 2x2 <2> 4x4 <3> 5x5 <4> 8x8 <5> 10x10 <6> 16x16 ");
+
 	while(loop == 1){
 		key = getch();
 		switch(key){
-			case '1':
+			case '1': //2x2 maze
 				n = 2;
 				loop = 0;
 			break;
 
-			case '2':
+			case '2': //4x4 maze
 				n = 4;
 				loop = 0;
 			break;
 
-			case '3':
+			case '3': //5x5 maze
 				n = 5;
 				loop = 0;
 			break;
 
-			case '4':
+			case '4': //8x8 maze
 				n = 8;
 				loop = 0;
 			break;
 
-			case '5':
+			case '5': //10x10 maze
 				n = 10;
 				loop = 0;
 			break;
 
-			case '6':
+			case '6': //16x16 maze
 				n = 16;
 				loop = 0;
 			break;
 
-			default:
+			default: // continue asking till the user gives a valid imput
 				loop =1;
 		}
 	}
-	cleardevice();
 	unit_cell = (endx - startx)/n;
 
+	//Asking user to use the wasd keys as arrow keys to draw the maze.
+	cleardevice();
 	loop = 1;
-
 	circle(startx, starty, radius);
 	circle(endx, endy, radius);
 
@@ -127,6 +132,7 @@ void draw_maze(){
 		switch(key){
 			case 'a':
 				if(check(x-unit_cell, y) == 1){
+					//the check function checks if the next coordinate is withing maze bounds.
 					x = x-unit_cell;
 					y = y;
 					count++;
@@ -164,10 +170,13 @@ void draw_maze(){
 					node[count].y = y;
 				}
 			break;
-			case 27:
+			case 27: // ASCII for esc key, basically enables re-draw
 				cleardevice();
 				circle(startx, starty, radius);
 				circle(endx, endy, radius);
+				x = startx;
+				y = starty;
+				moveto(x, y);
 			break;
 
 			default:;
@@ -179,10 +188,10 @@ void draw_maze(){
 	}
 }
 
-int bot_color(int x, int y){
+int bot(int x, int y){
 
 	int status;
-	circle(x, y, radius);
+	circle(x, y, radius); // a circular bot
 
 	if(x == startx && y == starty){
 		setfillstyle(SOLID_FILL, YELLOW);
@@ -204,12 +213,12 @@ int bot_color(int x, int y){
 	return status;
 }
 
-int refresh(int x, int y){
+int refresh(int x, int y){ //redraws all graphic elements in each frame
 	int status;
 
 	cleardevice();
 
-	status = bot_color(x, y);
+	status = bot(x, y);
 
 	maze();
 
@@ -219,6 +228,13 @@ int refresh(int x, int y){
 }
 
 void left_wall_algorithm(){
+	/*
+	direction priority:
+	1. left
+	2. forward
+	3. right
+	4. turn around
+	*/
 	int find = 1; //controlls the loop below
 	int status; //holds the bot status
 	int orientation;
@@ -311,12 +327,16 @@ int main()
 
 	initgraph(&gd, &gm, "c:\\turboc3\\bgi");
 
-	// Darwing a maze.
-	//maze();
+	//ask user to draw maze
 	draw_maze();
+
+	//use the user-drawn maze
 	maze();
+
+	//load starting frame.
 	refresh(startx, starty);
 
+	//wait for user input to start bot.
 	while (wait_for_key == 1) {
 		key = getch();
 		switch(key)
