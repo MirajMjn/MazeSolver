@@ -76,7 +76,8 @@ void draw_maze(){
 	//Asking the user to select the appropriate maze size.
 	printf("\nMaze Size: <1> 2x2 <2> 4x4 <3> 5x5 <4> 8x8 <5> 10x10 <6> 16x16 ");
 
-	while(loop == 1){
+	while(loop == 1)
+	{
 		key = getch();
 		switch(key){
 			case '1': //2x2 maze
@@ -114,6 +115,15 @@ void draw_maze(){
 		}
 	}
 	unit_cell = (endx - startx)/n;
+	
+	// create the doubly linked list
+    x = startx;
+    y = starty;
+    head = (struct node*)malloc(sizeof(struct node));
+    head->x = x;
+    head->y = y;
+    head->prev = NULL;
+    tail = head;
 
 	//Asking user to use the wasd keys as arrow keys to draw the maze.
 	cleardevice();
