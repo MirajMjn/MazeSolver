@@ -177,7 +177,7 @@ void maze(){
 	setcolor(RED);
 	setlinestyle(3, 0, 3);
 	rectangle(startx - 10, starty - 10, endx + 10, endy + 10); // encloses a square of dimension 400 x 400
-	outtextxy(endx + 20, starty, "Press (ESC) to terminate.");
+	outtextxy(endx + 20, starty, " (ESC) to terminate.");
 	//making maze path
 	setcolor(LIGHTGRAY); // color code : 7
 	moveto(startx, starty);
@@ -256,6 +256,8 @@ void draw_maze(){
 	circle(startx, starty, radius);
 	circle(endx, endy, radius);
 
+	outtextxy(endx + 20, starty, "(ESC) to clear");
+
 	moveto(startx, starty);
 	x = startx;
 	y = starty;
@@ -270,7 +272,7 @@ void draw_maze(){
 					//the check function checks if the next coordinate is withing maze bounds.
 					x = x-unit_cell;
 					y = y;
-                    status = 1;
+					status = 1;
 				}
 			break;
 
@@ -278,7 +280,7 @@ void draw_maze(){
 				if(check(x, y-unit_cell) == 1){
 					x = x;
 					y = y-unit_cell;
-                    status = 1;
+					status = 1;
 				}
 			break;
 
@@ -286,7 +288,7 @@ void draw_maze(){
 				if(check(x+unit_cell, y) == 1){
 					x = x+unit_cell;
 					y = y;
-                    status = 1;
+					status = 1;
 				}
 			break;
 
@@ -294,7 +296,7 @@ void draw_maze(){
 				if(check(x, y+unit_cell) == 1){
 					x = x;
 					y = y+unit_cell;
-                    status = 1;
+					status = 1;
 				}
 			break;
 			case 27: // ASCII for esc key, basically enables re-draw
@@ -310,12 +312,12 @@ void draw_maze(){
 		}
 
 		if(status == 1){
-            count++;
-            key_order[count] = key;
-            vertex[count].x = x;
-            vertex[count].y = y;
-            lineto(x, y);
-        }
+			count++;
+			key_order[count] = key;
+			vertex[count].x = x;
+			vertex[count].y = y;
+			lineto(x, y);
+		}
 		if(x == endx && y == endy){
 			loop =0;
 		}
